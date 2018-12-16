@@ -1,10 +1,10 @@
 # ENV - 温湿度和压力传感器
 
-<img src="assets/img/product_pics/units/M5GO_Unit_env.png" width="30%" height="30%">
+<img src="assets/img/product_pics/units/M5GO_Unit_env.png" width="30%" height="30%"><img src="assets/img/product_pics/units/unit_env_grove_a.png" width="30%" height="30%">
 
 ***
 
-:memo:**[描述](#描述)**|:octocat:**[例程](#例程)**| :electric_plug:**[原理图](#原理图)** | 🛒**[购买链接](https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-1172588101.29.f64c4476tugBw5&id=578200145474)**
+:memo:**[描述](#描述)**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:octocat:**[例程](#例程)**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:electric_plug:**[原理图](#原理图)**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🛒**[购买链接](https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-1172588101.29.f64c4476tugBw5&id=578200145474)**
 
 ## 描述
 
@@ -37,11 +37,13 @@ float hum = dht12.readHumidity();//humidity
 float pressure = bme.readPressure();//pressure
 ```
 
-具体例程请点击[这里](https://github.com/m5stack/M5-ProductExampleCodes/tree/master/Units/ENV)。
+具体例程请点击[这里](https://github.com/m5stack/M5-ProductExampleCodes/tree/master/Units/ENV/Arduino)。
 
 ### 2. UIFlow
 
 <img src="assets/img/product_pics/units/unit_example/example_unit_env_01.png" width="30%" height="30%"> <img src="assets/img/product_pics/units/unit_example/example_unit_env_02.png" width="55%" height="55%">
+
+具体例程请点击[这里](https://github.com/m5stack/M5-ProductExampleCodes/tree/master/Units/ENV/UIFlow)。
 
 ## 原理图
 
@@ -50,6 +52,6 @@ float pressure = bme.readPressure();//pressure
 ### 管脚映射
 
 <table>
- <tr><td>M5Core(GROVE A)</td><td>GPIO22</td><td>GPIO21</td></tr>
- <tr><td>ENV Unit</td><td>SCL</td><td>SDA</td></tr>
+ <tr><td>M5Core(GROVE A)</td><td>GPIO22</td><td>GPIO21</td><td>5V</td><td>GND</td></tr>
+ <tr><td>ENV Unit</td><td>SCL</td><td>SDA</td><td>5V</td><td>GND</td></tr>
 </table>
