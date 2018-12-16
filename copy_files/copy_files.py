@@ -42,7 +42,18 @@ import re
 curPath = os.getcwd()
 newFolderName = 'newFolder'
 file_list = []# 保存所有文件到这个列表中
-
+    flag_find_desc = 0
+    flag_find_picture = 0
+    flag_file_exit_picture = 0
+    pattern_desc = re.compile(r'## 描述')
+    pattern_picture = re.compile(r'<figure>')
+    pattern_example = re.compile(r'## 例程')
+    pattern_purchase = re.compile(r'(\[购买链接\])\((.*?)\)')
+    pos_example = 0
+    count = 0
+    count_example = 0
+    data_to_write = []
+    link_list = []
 
 def newFolder(path, newFolderName):
     targetPath = curPath+os.path.sep+newFolderName
@@ -82,9 +93,9 @@ import shutil
     # os.chdir(curPath)
 
 def extract_content(filename):
-    filename = get_filepath_shotname_extension(filename)
-    with open("filename","r",encoding="utf-8") as fp:
-        for line in fp.readlines():
+    # filename = get_filepath_shotname_extension(filename)
+    with open(filename,"r",encoding="utf-8") as f_r:
+        for line in f_r.readlines():
             match_desc = pattern_desc.match(line)
             match_picture = pattern_picture.match(line)
             if match_desc or match_picture:
@@ -97,7 +108,7 @@ def extract_content(filename):
                 flag_find_picture = 0
                 flag_find_desc = 0
                 # print(count)
-                fp.close()
+                f_r.close()
             if flag_find_desc:
                 data_to_write.append(line)
             count+=1
@@ -106,43 +117,42 @@ def extract_content(filename):
         else: # this file doesn't have pictures
             # print("this file doesn't have pictures:  %s"%filename)
             flag_find_desc = 0
-            fp.close()
+            f_r.close()
     # print(data_to_write)
     os.chdir(targetPath)
-    with open("temp.md","w",encoding="utf-8") as temp_fp:
+    with open("temp.md","w",encoding="utf-8") as temp_f_w:
         for i in data_to_write:
-            temp_fp.write(i)# 保存要拷贝的内容到临时文件中
-    temp_fp.close()
+            temp_f_w.write(i)# 保存要拷贝的内容到临时文件中
+    temp_f_w.close()
 
-if __name__ == "__main__":
-    # for i in file_list:
-    #     if file_list[i]==""
-    #     print(file_list[i])
-    # copy_file_rename(file_list[2])
-    # copy_file_rename(file_list[3])
-    # map(copy_file_rename, file_list)
+def add_data_to_file(des_file, src_file):# 插入到中文文件
+    fp = open(des_file, "r", encoding="utf-8")
+    fp_add = open(src_file,"r", encoding="utf-8")
+    content = fp.read()
+    content_add = fp_add.read()
+    fp.close()
+    fp_add.close()
+    post = content.find("## 例程")# 寻找待插入位置所在的字符串
+    if post != 1:
+        content = content[:post] + content_add + content[post:]
+        # print(content)
+        fp = open(des_file, "w", encoding="utf-8")
+        fp.write(content)
+        fp.close()
 
-    flag_find_desc = 0
-    flag_find_picture = 0
-    flag_file_exit_picture = 0
-    pattern_desc = re.compile(r'## 描述')
-    pattern_picture = re.compile(r'<figure>')
-    pattern_example = re.compile(r'## 例程')
-    pattern_purchase = re.compile(r'(\[购买链接\])\((.*?)\)')
-    pos_example = 0
-    count = 0
-    count_example = 0
-    data_to_write = []
-    link_list = []
-    os.chdir(targetPath)
+def delect_replace_content(filename):
+    """ 
+    先通过正则表达式匹配出两个网址，然后将第一个匹配到的网址替换成第二个网址
+    替换文件中的内容为对应unit名字
+    删除多余的内容
+    """
+    filename = get_filepath_shotname_extension(filename)
     with open("1.md","r",encoding="utf-8") as fp:
         lines = fp.readlines()
         for line in lines:
             match_purchase = pattern_purchase.search(line)
             if match_purchase:
-                # print(match_purchase.group(2))
                 link_list.append(match_purchase.group(2))
-        # fp.close()
         # print(link_list)
     with open("1.md","w",encoding="utf-8") as f_w:
         for line in lines:
@@ -154,29 +164,28 @@ if __name__ == "__main__":
                 line = line.replace(link_list[0], link_list[1])
             if ("-  **例程**" or "- **例程**") in line:
                 print(line)
-                continue
+                continue # 删除多余的
             if ("-  **[购买链接]" or "- **[购买链接]") in line:
                 print(line)
-                continue
+                continue # 删除多余的
             f_w.write(line)    
     fp.close()
     f_w.close()
 
+if __name__ == "__main__":
+    # for i in file_list:
+    #     if file_list[i]==""
+    #     print(file_list[i])
+    # copy_file_rename(file_list[2])
+    # copy_file_rename(file_list[3])
+    # map(copy_file_rename, file_list)
+
+    os.chdir(targetPath)
 
 
-    fp = open("1.md", "r", encoding="utf-8")
-    fp_add = open("temp.md","r", encoding="utf-8")
-    content = fp.read()
-    content_add = fp_add.read()
-    fp.close()
-    fp_add.close()
-    post = content.find("## 例程")
-    if post != 1:
-        content = content[:post] + content_add + content[post:]
-        # print(content)
-        fp = open("1.md", "w", encoding="utf-8")
-        fp.write(content)
-        fp.close()
+
+
+
 
 
 
