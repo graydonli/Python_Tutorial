@@ -19,7 +19,7 @@ files_list = []# 保存所有文件到这个列表中
 flag_find_desc = 0
 flag_find_picture = 0
 flag_file_exit_picture = 0
-pattern_desc = re.compile(r'## 描述')
+pattern_desc = re.compile(r'## Description')
 pattern_picture = re.compile(r'<figure>')
 pattern_example = re.compile(r'## 例程')
 pattern_purchase = re.compile(r'(\[购买链接\])\((.*?)\)')
@@ -28,7 +28,7 @@ count = 0
 count_example = 0
 data_to_write = []
 link_list = []
-add_related_links = ["- **[官方频道视频](https://i.youku.com/i/UNjE1ODA2MzE0OA==?spm=a2hzp.8253869.0.0)**", "\n", "\n", "- **[官方论坛](http://forum.m5stack.com/)**", "\n"]
+add_related_links = ["- **[Offical Video](https://www.youtube.com/channel/UCozgFVglWYQXbvTmGyS739w)**", "\n", "\n", "- **[Forum](http://forum.m5stack.com/)**", "\n"]
 
 def make_dir(path, new_folder):
     global target_path
@@ -107,7 +107,7 @@ def add_data_to_file(des_file, src_file):# 插入到中文文件
     content_add = fp_add.read()
     fp.close()
     fp_add.close()
-    post = content.find("## 例程")# 寻找待插入位置所在的字符串
+    post = content.find("## Example")# 寻找待插入位置所在的字符串
     if post != 1:
         content = content[:post] + content_add + content[post:]
         # print(content)
@@ -117,7 +117,7 @@ def add_data_to_file(des_file, src_file):# 插入到中文文件
 
 def get_device_name(filename):
     shotname = get_filepath_shotname_extension(filename)[0]
-    dev_name = shotname.split("unit_")[1]
+    dev_name = shotname
     # print(dev_name)
     return dev_name
 
@@ -144,7 +144,7 @@ def delect_replace_content(filename):
                 line = line.replace("env", get_device_name(filename))
             if link_list[0] in line:
                 line = line.replace(link_list[0], link_list[1])
-            if ("-  **例程**" or "- **例程**" or "-  **[购买链接]" or "- **[购买链接]" or "-  **[原理图]" or "- **[原理图]") in line:
+            if ("-  **Example**" or "- **Example**" or "-  **[Purchase]" or "- **[Purchase]" or "-  **[Schematic]" or "- **[Schematic]") in line:
                 # print(line)
                 continue # 删除多余的
             f_w.write(line)
@@ -156,7 +156,7 @@ def delect_replace_content(filename):
         count = 0
         lines = fp.readlines()
         for line in lines:
-            if ("## 相关链接" or "## 文档") in line:
+            if ("## DOCUMENTS") in line:
                 links_index = count
                 print(links_index)
             count = count + 1
@@ -171,13 +171,13 @@ if __name__ == "__main__":
     make_dir(cur_path, "temp_folder")
     files_list = get_all_files(cur_path)
     for filename in files_list:
-        if not filename == "unit_env_template.md":
+        if not filename == "env_template.md":
             print(filename)
-            shutil.copyfile(cur_path+"\\unit_env_template.md", target_path+"\\"+filename)
+            shutil.copyfile(cur_path+"\\env_template.md", target_path+"\\"+filename)
             extract_content(filename)# make a temp file at cur_path
-            add_data_to_file(filename, "temp.md")
-            delect_replace_content(filename)
-            data_to_write.clear()# 清空列表
-            link_list.clear()
-            # print(data_to_write)
-            os.chdir(cur_path)
+            # add_data_to_file(filename, "temp.md")
+            # delect_replace_content(filename)
+            # data_to_write.clear()# 清空列表
+            # link_list.clear()
+            # # print(data_to_write)
+            # os.chdir(cur_path)
