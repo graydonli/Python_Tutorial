@@ -19,16 +19,34 @@ files_list = []# 保存所有文件到这个列表中
 flag_find_desc = 0
 flag_find_picture = 0
 flag_file_exit_picture = 0
-pattern_desc = re.compile(r'## Description')
-pattern_picture = re.compile(r'<figure>')
-pattern_example = re.compile(r'## Example')
-pattern_purchase = re.compile(r'(\[Purchase\])\((.*?)\)')
+pattern_desc = re.compile(r'^\[中文\]\([(/zh_CN)(zh_CN)]')
 pos_example = 0
 count = 0
 count_example = 0
 data_to_write = []
 link_list = []
 add_related_links = ["- **[Offical Video](https://www.youtube.com/channel/UCozgFVglWYQXbvTmGyS739w)**", "\n", "\n", "- **[Forum](http://forum.m5stack.com/)**", "\n"]
+
+def delet_line(path):
+    # filename = os.path.split(path)[1]
+    # print("path: %s, filename: %s"%(path, filename))
+    content_list = []
+    with open(path,"r",encoding="utf-8") as f_r:
+        for line in f_r.readlines():
+            # print(line)
+            match_desc = pattern_desc.match(line)
+            if match_desc:
+                # print(line)
+                content_list.append("\n")
+                continue
+            content_list.append(line)
+        f_r.close()
+        # print(content_list)
+    with open(path,"w",encoding="utf-8") as f_w:
+        for content in content_list:
+            f_w.write(content)
+        f_w.close()
+    print(path)
 
 def make_dir(path, new_folder):
     global target_path
@@ -168,17 +186,37 @@ def delect_replace_content(filename):
             fp.write(line)
     fp.close()
 
+def recursive_exect_file(path):
+    # files_list = os.listdir(path)
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            # print(old_path)
+            old_path = os.path.join(root, file)
+            filetype = get_filepath_shotname_extension(old_path)[1]
+            if filetype == '.md':
+                delet_line(old_path)
+                # print(file)
+            # if os.path.isfile(old_path):
+            #     filetype = get_filepath_shotname_extension(old_path)[1]
+            #     if filetype == '.md':
+            #         # delet_line(file)
+            #         print(file)
+            # else:
+            #     recursive_exect_file(old_path)
+
 if __name__ == "__main__":
-    make_dir(cur_path, "temp_folder")
-    files_list = get_all_files(cur_path)
-    for filename in files_list:
-        if not filename == "env_template.md":
-            print(filename)
-            shutil.copyfile(cur_path+"\\env_template.md", target_path+"\\"+filename)
-            extract_content(filename)# make a temp file at cur_path
-            add_data_to_file(filename, "temp.md")
-            delect_replace_content(filename)
-            data_to_write.clear()# 清空列表
-            link_list.clear()
-            # print(data_to_write)
-            os.chdir(cur_path)
+    # make_dir(cur_path, "temp_folder")
+    # files_list = get_all_files(cur_path)
+    # for filename in files_list:
+    #     if not filename == "env_template.md":
+    #         print(filename)
+    #         shutil.copyfile(cur_path+"\\env_template.md", target_path+"\\"+filename)
+    #         extract_content(filename)# make a temp file at cur_path
+    #         add_data_to_file(filename, "temp.md")
+    #         delect_replace_content(filename)
+    #         data_to_write.clear()# 清空列表
+    #         link_list.clear()
+    #         # print(data_to_write)
+    #         os.chdir(cur_path)
+
+    recursive_exect_file('.')

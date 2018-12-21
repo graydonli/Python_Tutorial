@@ -2,11 +2,11 @@
 
 [中文](/zh_CN/product_documents/units/unit_dac) | English | [日本語](ja/product_documents/units/unit_dac)
 
-## DESCRIPTION
+## Description
 
 This is a unit can convert digital signal to analog signal like voltage waveform, audio waveform and so on. It integrates a 12-bit high resolution DAC chip named MCP4725 which integrates a on-board non-volatile memory (EEPROM). The unit comunicates with M5Core with I2C. The DAC input and configuration data can be programmed to the EEPROM.
 
-## FEATURES
+## Feature
 
 -  Up to 12 bits of resolution
 -  Output 0~3.3V voltage
@@ -18,7 +18,7 @@ This is a unit can convert digital signal to analog signal like voltage waveform
 -  MP3 Audio Player
 -  mini Oscilloscope
 
-## DOCUMENTS
+## Related Link
 
 -  **Example** - [Arduino](https://github.com/m5stack/M5Stack/tree/master/examples/Unit/DAC_MCP4725)
 
